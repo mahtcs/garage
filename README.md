@@ -16,7 +16,7 @@ A escolha das tecnologias foi focada em produtividade e ferramentas modernas.
 
 -----------------------------------------------------------------------------------------------------------------------------
 
-## 📋 Pré-requisitos
+##  Pré-requisitos
 
 Antes de começar, garanta que você tenha as seguintes ferramentas instaladas e configuradas:
 
@@ -24,7 +24,7 @@ Antes de começar, garanta que você tenha as seguintes ferramentas instaladas e
 * **Docker Desktop** configurado para usar o backend do WSL2.
 * **Git** instalado no seu ambiente WSL.
 
-## ⚙️ Como Rodar o Projeto (Passo a Passo)
+##  Como Rodar o Projeto (Passo a Passo)
 
 Siga os passos abaixo para executar a aplicação em seu ambiente local.
 
@@ -32,7 +32,7 @@ Siga os passos abaixo para executar a aplicação em seu ambiente local.
 Abra seu terminal WSL (Ubuntu) e clone este repositório para o diretório de sua preferência.
 
 ```bash
-git clone https://github.com/mahtcs/garage.git
+git clone [https://github.com/mahtcs/garage.git](https://github.com/mahtcs/garage.git)
 cd garage
 ```
 
@@ -42,16 +42,20 @@ cd garage
 cp .env.example .env
 ```
 
-**3. Subir os Contêineres com o Sail**
+**3. Instalar as Dependências do Composer**
+
+```bash
+docker run --rm \
+    -v "$(pwd)":/opt \
+    -w /opt \
+    laravelsail/php83-composer:latest \
+    composer install
+```
+
+**4. Subir os Contêineres com o Sail**
 
 ```bash
 bash ./vendor/bin/sail up -d
-```
-
-**4. Instalar as Dependências do Composer**
-
-```bash
-bash ./vendor/bin/sail composer install
 ```
 
 **5. Gerar a Chave da Aplicação**
@@ -80,7 +84,7 @@ A aplicação agora está rodando! Você pode acessá-la em seu navegador no seg
 
 ---
 
-## ⚠️ Solução de Problemas (Troubleshooting)
+##  Solução de Problemas (Troubleshooting)
 
 Durante a instalação em ambientes WSL, podem ocorrer alguns problemas de permissão. Se você encontrar algum erro, aqui estão as soluções mais comuns:
 
@@ -102,7 +106,7 @@ sudo chown -R $USER:$USER .
 
 **Causa:** O sistema de arquivos do WSL pode estar montado de uma forma que impede a execução direta de scripts.
 
-**Solução:** Execute o script `sail` usando o `bash` diretamente. Todos os comandos no tutorial acima já usam este método para evitar o problema, mas caso você tente executar de outra forma, lembre-se de usar este formato:
+**Solução:** Execute o script `sail` usando o `bash` diretamente neste formato:
 
 ```bash
 # Formato correto
