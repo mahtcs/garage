@@ -41,7 +41,7 @@
                         <tr>
                             <td class="border px-4 py-2">{{ $garage->street }}, {{ $garage->number }} - {{ $garage->district }}</td>
                             <td class="border px-4 py-2">{{ $garage->capacity }}</td>
-                            <td class="border px-4 py-2">x</td>
+                            <td class="border px-4 py-2">{{ $garage->rentals_count }}</td>
                             <td class="border px-4 py-2">
                                 <button wire:click="edit({{ $garage->id }})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Editar</button>
                                 <button wire:click="delete({{ $garage->id }})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Deletar</button>

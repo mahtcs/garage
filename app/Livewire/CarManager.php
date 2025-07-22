@@ -6,7 +6,6 @@ use Livewire\Component;
 use App\Models\Car;
 use App\Models\Rental;
 use Illuminate\Support\Facades\Auth;
-use Livewire\Attributes\Title;
 use App\Models\Garage;
 
 class CarManager extends Component
@@ -92,7 +91,6 @@ class CarManager extends Component
     public function edit($id)
     {
         $car = Car::findOrFail($id);
-        // Garante que o usuário só pode editar o próprio carro
         if ($car->user_id !== Auth::id()) {
             abort(403);
         }
@@ -118,25 +116,21 @@ class CarManager extends Component
     }
 
     // Método para abrir o modal de busca
+
     public function findSpot($carId)
     {
         $this->selectedCar = Car::findOrFail($carId);
-        $this->searchCep = Auth::user()->zip_code; // Sugere o CEP do usuário
-        $this->searchGaragesResult = [];
-        $this->showFindSpotModal = true;
-    }
-
-    public function searchGarages()
-    {
-        $this->validate(['searchCep' => 'required|string|max:9']);
         
-        $this->searchGaragesResult = Garage::where('zip_code', $this->searchCep)
+        $this->searchGaragesResult = Garage::query()
+            ->where('user_id', '!=', Auth::id())
             ->whereHas('spots', function ($query) {
                 $query->where(function ($q) {
                     $q->where('supported_body_types', $this->selectedCar->body_type)
                     ->orWhere('supported_body_types', 'all');
                 })
-                ->whereDoesntHave('activeRental'); // Apenas vagas sem aluguel ativo
+                ->whereDoesntHave('activeRental', function ($q) {
+                    $q->whereIn('status', ['pending', 'active']);
+                });
             })
             ->with('owner')
             ->withCount(['spots' => function ($query) {
@@ -144,10 +138,15 @@ class CarManager extends Component
                     $q->where('supported_body_types', $this->selectedCar->body_type)
                     ->orWhere('supported_body_types', 'all');
                 })
-                ->whereDoesntHave('activeRental');
+                ->whereDoesntHave('activeRental', function ($q) {
+                    $q->whereIn('status', ['pending', 'active']);
+                });
             }])
             ->get();
+
+        $this->showFindSpotModal = true; // Abre o modal já com os resultados
     }
+
 
     // Método para abrir o segundo modal (solicitação)
     public function showRequestRentalModal($garageId)
@@ -191,7 +190,7 @@ class CarManager extends Component
             'status' => 'pending',
         ]);
 
-        session()->flash('message', 'Sua solicitação foi enviada ao dono da garagem. Avisaremos quando for aprovada.');
+        session()->flash('message', 'Seu carro foi alocado com sucesso');
         $this->showRequestModal = false;
     }
 }

@@ -3,64 +3,73 @@
         <div class="fixed inset-0 transition-opacity">
             <div class="absolute inset-0 bg-gray-500 opacity-75"></div>
         </div>
-        <span class="hidden sm:inline-block sm:align-middle sm:h-screen"></span>​
-        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full" role="dialog" aria-modal="true" aria-labelledby="modal-headline">
+        <div class="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-4xl sm:w-full">
             <form>
                 <div class="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                    <div class="">
-                        <div class="mb-4">
-                            <label for="capacity" class="block text-gray-700 text-sm font-bold mb-2">Capacidade (vagas):</label>
-                            <input type="number" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="capacity" placeholder="Ex: 5" wire:model="capacity">
-                            @error('capacity') <span class="text-red-500">{{ $message }}</span>@enderror
+                    <h3 class="text-lg font-medium text-gray-900">Cadastrar Nova Garagem</h3>
+                    <div class="mt-4 grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <!-- Campos do Endereço -->
+                        <div>
+                            <label for="street" class="block text-sm font-medium text-gray-700">Rua</label>
+                            <input type="text" wire:model.defer="street" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         </div>
-                        <div class="mb-4">
-                            <label for="street" class="block text-gray-700 text-sm font-bold mb-2">Rua:</label>
-                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="street" placeholder="Ex: Rua das Flores" wire:model="street">
-                            @error('street') <span class="text-red-500">{{ $message }}</span>@enderror
+                        <div>
+                            <label for="number" class="block text-sm font-medium text-gray-700">Número</label>
+                            <input type="text" wire:model.defer="number" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         </div>
-                        <div class="mb-4">
-                            <label for="number" class="block text-gray-700 text-sm font-bold mb-2">Número:</label>
-                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="number" placeholder="Ex: 123" wire:model="number">
-                            @error('number') <span class="text-red-500">{{ $message }}</span>@enderror
+                        <div>
+                            <label for="district" class="block text-sm font-medium text-gray-700">Bairro</label>
+                            <input type="text" wire:model.defer="district" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         </div>
-                        <div class="mb-4">
-                            <label for="complement" class="block text-gray-700 text-sm font-bold mb-2">Complemento:</label>
-                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="complement" placeholder="Ex: Apt 101" wire:model="complement">
-                            @error('complement') <span class="text-red-500">{{ $message }}</span>@enderror
+                        <div>
+                            <label for="city" class="block text-sm font-medium text-gray-700">Cidade</label>
+                            <input type="text" wire:model.defer="city" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         </div>
-                        <div class="mb-4">
-                            <label for="district" class="block text-gray-700 text-sm font-bold mb-2">Bairro:</label>
-                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="district" placeholder="Ex: Centro" wire:model="district">
-                            @error('district') <span class="text-red-500">{{ $message }}</span>@enderror
+                        <div>
+                            <label for="state" class="block text-sm font-medium text-gray-700">Estado</label>
+                            <input type="text" wire:model.defer="state" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         </div>
-                        <div class="mb-4">
-                            <label for="city" class="block text-gray-700 text-sm font-bold mb-2">Cidade:</label>
-                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="city" placeholder="Ex: São Paulo" wire:model="city">
-                            @error('city') <span class="text-red-500">{{ $message }}</span>@enderror
+                        <div>
+                            <label for="zip_code" class="block text-sm font-medium text-gray-700">CEP</label>
+                            <input type="text" wire:model.defer="zip_code" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         </div>
-                        <div class="mb-4">
-                            <label for="state" class="block text-gray-700 text-sm font-bold mb-2">Estado:</label>
-                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="state" placeholder="Ex: SP" wire:model="state">
-                            @error('state') <span class="text-red-500">{{ $message }}</span>@enderror
-                        </div>
-                        <div class="mb-4">
-                            <label for="zip_code" class="block text-gray-700 text-sm font-bold mb-2">CEP:</label>
-                            <input type="text" class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline" id="zip_code" placeholder="Ex: 00000-000" wire:model="zip_code">
-                            @error('zip_code') <span class="text-red-500">{{ $message }}</span>@enderror
+                        <div class="md:col-span-2">
+                            <label for="capacity" class="block text-sm font-medium text-gray-700">Capacidade (Nº de Vagas)</label>
+                            <input type="number" wire:model.live="capacity" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm">
                         </div>
                     </div>
+
+                    <!-- Detalhes das Vagas -->
+                    @if($capacity > 0)
+                    <div class="mt-6">
+                        <h4 class="text-md font-medium text-gray-800">Detalhes das Vagas</h4>
+                        <div class="mt-2 space-y-4 max-h-60 overflow-y-auto">
+                            @foreach($spots_data as $index => $spot)
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 p-2 border rounded-md">
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600">Identificação da Vaga {{ $index + 1 }}</label>
+                                    <input type="text" wire:model.defer="spots_data.{{ $index }}.identification" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm">
+                                </div>
+                                <div>
+                                    <label class="block text-xs font-medium text-gray-600">Tipos de Veículo Suportados</label>
+                                    <select wire:model.defer="spots_data.{{ $index }}.supported_body_types" class="mt-1 block w-full rounded-md border-gray-300 shadow-sm text-sm">
+                                        <option value="all">Todos</option>
+                                        <option value="hatch">Hatch</option>
+                                        <option value="sedan">Sedan</option>
+                                        <option value="suv">SUV</option>
+                                        <option value="pickup">Pickup</option>
+                                        <option value="moto">Moto</option>
+                                    </select>
+                                </div>
+                            </div>
+                            @endforeach
+                        </div>
+                    </div>
+                    @endif
                 </div>
                 <div class="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
-                    <span class="flex w-full rounded-md shadow-sm sm:ml-3 sm:w-auto">
-                        <button wire:click.prevent="store()" type="button" class="inline-flex justify-center w-full rounded-md border border-transparent px-4 py-2 bg-green-600 text-base leading-6 font-medium text-white shadow-sm hover:bg-green-500 focus:outline-none focus:border-green-700 focus:shadow-outline-green transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                        Salvar
-                        </button>
-                    </span>
-                    <span class="mt-3 flex w-full rounded-md shadow-sm sm:mt-0 sm:w-auto">
-                        <button wire:click="closeModal()" type="button" class="inline-flex justify-center w-full rounded-md border border-gray-300 px-4 py-2 bg-white text-base leading-6 font-medium text-gray-700 shadow-sm hover:text-gray-500 focus:outline-none focus:border-blue-300 focus:shadow-outline-blue transition ease-in-out duration-150 sm:text-sm sm:leading-5">
-                        Cancelar
-                        </button>
-                    </span>
+                    <button wire:click.prevent="store()" type="button" class="bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Salvar Garagem</button>
+                    <button wire:click="closeModal()" type="button" class="mr-3 bg-white hover:bg-gray-100 text-gray-700 font-bold py-2 px-4 rounded border">Cancelar</button>
                 </div>
             </form>
         </div>

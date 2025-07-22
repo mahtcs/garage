@@ -4,6 +4,7 @@ namespace App\Livewire;
 
 use Livewire\Component;
 use App\Models\Garage;
+use App\Models\Rental;
 use Illuminate\Support\Facades\Auth;
 
 class GarageManager extends Component
@@ -11,11 +12,31 @@ class GarageManager extends Component
     public $garages;
     public $garage_id, $capacity, $street, $number, $complement, $district, $city, $state, $zip_code;
     public $isModalOpen = false;
+    public $spots_data = [];
+
+    // Hook que é executado sempre que a propriedade $capacity é atualizada
+    public function updatedCapacity($value)
+    {
+        $current_spots_count = count($this->spots_data);
+        $new_capacity = (int)$value;
+
+        if ($new_capacity > $current_spots_count) {
+            for ($i = $current_spots_count; $i < $new_capacity; $i++) {
+                $this->spots_data[] = ['identification' => 'Vaga #' . ($i + 1), 'supported_body_types' => 'all'];
+            }
+        } elseif ($new_capacity < $current_spots_count) {
+            $this->spots_data = array_slice($this->spots_data, 0, $new_capacity);
+        }
+    }
 
     public function render()
     {
-        // Carrega as garagens do usuário logado
-        $this->garages = Auth::user()->garages()->withCount('spots')->get();
+        $user = Auth::user();
+        $this->garages = $user->garages()->withCount('rentals')->get();
+        $this->pendingRentals = Rental::where('owner_id', $user->id)
+                                      ->where('status', 'pending')
+                                      ->with(['car', 'client'])
+                                      ->get();
         return view('livewire.garage-manager')->layout('layouts.app');
     }
     
@@ -44,7 +65,7 @@ class GarageManager extends Component
     // Salva a garagem
     public function store()
     {
-        $this->validate([
+        $validatedData = $this->validate([
             'capacity' => 'required|integer|min:1',
             'street' => 'required|string|max:255',
             'number' => 'required|string|max:50',
@@ -52,57 +73,24 @@ class GarageManager extends Component
             'city' => 'required|string|max:255',
             'state' => 'required|string|max:2',
             'zip_code' => 'required|string|max:9',
+            'spots_data.*.identification' => 'required|string',
+            'spots_data.*.supported_body_types' => 'required|in:hatch,sedan,suv,pickup,moto,all',
         ]);
+        
+        $validatedData['user_id'] = Auth::id();
+        $garage = Garage::create($validatedData);
 
-        $garage = Garage::updateOrCreate(['id' => $this->garage_id], [
-            'user_id' => Auth::id(),
-            'capacity' => $this->capacity,
-            'street' => $this->street,
-            'number' => $this->number,
-            'complement' => $this->complement,
-            'district' => $this->district,
-            'city' => $this->city,
-            'state' => $this->state,
-            'zip_code' => $this->zip_code,
-        ]);
-
-        // Se for uma garagem nova, cria os spots
-        if (!$this->garage_id) {
-            for ($i = 1; $i <= $garage->capacity; $i++) {
-                $garage->spots()->create([
-                    'identification' => "Vaga #{$i}",
-                    'supported_body_types' => 'all' // Padrão
-                ]);
-            }
+        // Criar as vagas personalizadas
+        foreach ($this->spots_data as $spot) {
+            $garage->spots()->create($spot);
         }
 
-        // Atribui o role se o usuário ainda não tiver
         if (!Auth::user()->hasRole('garage_owner')) {
             Auth::user()->assignRole('garage_owner');
         }
 
-        session()->flash('message', 'Garagem salva com sucesso.');
+        session()->flash('message', 'Garagem e vagas cadastradas com sucesso.');
         $this->closeModal();
-        $this->resetInputFields();
-    }
-    
-    // Edita a garagem (aqui não permitimos alterar endereço, apenas capacidade)
-    public function edit($id)
-    {
-        $garage = Garage::findOrFail($id);
-        if ($garage->user_id !== Auth::id()) { abort(403); }
-
-        $this->garage_id = $id;
-        $this->capacity = $garage->capacity;
-        // Preenche os outros campos apenas para exibição (desabilitados no form)
-        $this->street = $garage->street;
-        $this->number = $garage->number;
-        $this->district = $garage->district;
-        $this->city = $garage->city;
-        $this->state = $garage->state;
-        $this->zip_code = $garage->zip_code;
-
-        $this->openModal();
     }
     
     // Deleta a garagem (com validação)

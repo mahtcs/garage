@@ -27,4 +27,10 @@ class Garage extends Model
     { 
         return $this->hasMany(Spot::class); 
     }
+    
+    public function rentals()
+    {
+        return $this->hasManyThrough(Rental::class, Spot::class);
+    }
+
 }
