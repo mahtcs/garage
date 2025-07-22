@@ -29,11 +29,6 @@
                     </div>
                 @endif
 
-                <div class="flex justify-start space-x-4 my-3">
-                    <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Cadastrar Novo Carro</button>
-                    <a href="{{ route('garages.manager') }}" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Inscrever Garagem</a>
-                </div>
-
                 @if($isModalOpen)
                     @include('livewire.create-car-modal')
                 @endif

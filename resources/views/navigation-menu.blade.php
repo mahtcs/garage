@@ -15,7 +15,16 @@
                     <x-nav-link href="{{ route('dashboard') }}" :active="request()->routeIs('dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    <x-nav-link href="{{ route('garages.manager') }}" :active="request()->routeIs('garages.manager')">
+                        @role('garage_owner')
+                            {{ __('Minhas Garagens') }}
+                        @else
+                            {{ __('Seja um Anfitrião') }}
+                        @endrole
+                    </x-nav-link>
                 </div>
+
             </div>
 
             <div class="hidden sm:flex sm:items-center sm:ms-6">

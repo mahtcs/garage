@@ -1,61 +1,115 @@
-<p align="center"><a href="https://laravel.com" target="_blank"><img src="https://raw.githubusercontent.com/laravel/art/master/logo-lockup/5%20SVG/2%20CMYK/1%20Full%20Color/laravel-logolockup-cmyk-red.svg" width="400" alt="Laravel Logo"></a></p>
+# Garage - Sistema de Gestão de Vagas de Garagem
 
-<p align="center">
-<a href="https://github.com/laravel/framework/actions"><img src="https://github.com/laravel/framework/workflows/tests/badge.svg" alt="Build Status"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/dt/laravel/framework" alt="Total Downloads"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/v/laravel/framework" alt="Latest Stable Version"></a>
-<a href="https://packagist.org/packages/laravel/framework"><img src="https://img.shields.io/packagist/l/laravel/framework" alt="License"></a>
-</p>
+Desenvolvi o `Garage`  como um projeto de portfólio para praticar e registrar meu aprendizado de Laravel. 
 
-## About Laravel
+O sistema simula uma plataforma onde usuários podem alugar vagas de garagem ociosas de outros usuários para estacionar seus veículos.
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+-----------------------------------------------------------------------------------------------------------------------------
+## Stack Utilizada
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+A escolha das tecnologias foi focada em produtividade e ferramentas modernas.
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+* **Livewire (v3)**: Para criar a interface dinâmica. Com ele, pude construir componentes reativos (como modais e formulários que se atualizam sozinhos)
+* **Jetstream**: Para acelerar o início. É um starter kit do Laravel que já me entregou todo o sistema de login, registro e perfil de usuário pronto e seguro.
+* **Tailwind CSS**: Para a estilização. Um framework CSS que permite criar o design direto no HTML com classes utilitárias, o que torna a estilização muito mais rápida.
+* **Docker & Laravel Sail**: Para o ambiente de desenvolvimento. Com um único comando (`sail up`), todo o ambiente necessário (PHP, MySQL, etc.) sobe dentro de contêineres, garantindo que o projeto rode em qualquer máquina sem dor de cabeça.
 
-## Learning Laravel
+-----------------------------------------------------------------------------------------------------------------------------
 
-Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
+## 📋 Pré-requisitos
 
-You may also try the [Laravel Bootcamp](https://bootcamp.laravel.com), where you will be guided through building a modern Laravel application from scratch.
+Antes de começar, garanta que você tenha as seguintes ferramentas instaladas e configuradas:
 
-If you don't feel like reading, [Laracasts](https://laracasts.com) can help. Laracasts contains thousands of video tutorials on a range of topics including Laravel, modern PHP, unit testing, and JavaScript. Boost your skills by digging into our comprehensive video library.
+* **WSL2 (Subsistema do Windows para Linux)** com uma distribuição Ubuntu.
+* **Docker Desktop** configurado para usar o backend do WSL2.
+* **Git** instalado no seu ambiente WSL.
 
-## Laravel Sponsors
+## ⚙️ Como Rodar o Projeto (Passo a Passo)
 
-We would like to extend our thanks to the following sponsors for funding Laravel development. If you are interested in becoming a sponsor, please visit the [Laravel Partners program](https://partners.laravel.com).
+Siga os passos abaixo para executar a aplicação em seu ambiente local.
 
-### Premium Partners
+**1. Clonar o Repositório**
+Abra seu terminal WSL (Ubuntu) e clone este repositório para o diretório de sua preferência.
 
-- **[Vehikl](https://vehikl.com)**
-- **[Tighten Co.](https://tighten.co)**
-- **[Kirschbaum Development Group](https://kirschbaumdevelopment.com)**
-- **[64 Robots](https://64robots.com)**
-- **[Curotec](https://www.curotec.com/services/technologies/laravel)**
-- **[DevSquad](https://devsquad.com/hire-laravel-developers)**
-- **[Redberry](https://redberry.international/laravel-development)**
-- **[Active Logic](https://activelogic.com)**
+```bash
+git clone https://github.com/mahtcs/garage.git
+cd garage
+```
 
-## Contributing
+**2. Copiar o Arquivo de Ambiente**
 
-Thank you for considering contributing to the Laravel framework! The contribution guide can be found in the [Laravel documentation](https://laravel.com/docs/contributions).
+```bash
+cp .env.example .env
+```
 
-## Code of Conduct
+**3. Subir os Contêineres com o Sail**
 
-In order to ensure that the Laravel community is welcoming to all, please review and abide by the [Code of Conduct](https://laravel.com/docs/contributions#code-of-conduct).
+```bash
+bash ./vendor/bin/sail up -d
+```
 
-## Security Vulnerabilities
+**4. Instalar as Dependências do Composer**
 
-If you discover a security vulnerability within Laravel, please send an e-mail to Taylor Otwell via [taylor@laravel.com](mailto:taylor@laravel.com). All security vulnerabilities will be promptly addressed.
+```bash
+bash ./vendor/bin/sail composer install
+```
 
-## License
+**5. Gerar a Chave da Aplicação**
 
-The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
+```bash
+bash ./vendor/bin/sail php artisan key:generate
+```
+
+**6. Rodar as Migrations e Seeders**
+
+```bash
+bash ./vendor/bin/sail php artisan migrate --seed
+```
+
+**7. Compilar os Assets de Front-end**
+
+```bash
+bash ./vendor/bin/sail npm install
+bash ./vendor/bin/sail npm run dev
+```
+
+**8. Pronto!**
+A aplicação agora está rodando! Você pode acessá-la em seu navegador no seguinte endereço:
+
+[**http://localhost**](http://localhost)
+
+---
+
+## ⚠️ Solução de Problemas (Troubleshooting)
+
+Durante a instalação em ambientes WSL, podem ocorrer alguns problemas de permissão. Se você encontrar algum erro, aqui estão as soluções mais comuns:
+
+### Erro de Permissão ao Rodar Comandos `artisan` ou `sail`
+
+**Sintoma:** O terminal exibe uma mensagem como `Permission denied` ao tentar executar um comando `php artisan` ou ao tentar escrever em arquivos de log (`storage/logs`).
+
+**Causa:** Os arquivos do projeto podem ter sido criados com o usuário `root` do contêiner Docker, e seu usuário do WSL não tem permissão para modificá-los.
+
+**Solução:** Execute o seguinte comando na raiz do projeto para tornar seu usuário o dono de todos os arquivos e pastas.
+
+```bash
+sudo chown -R $USER:$USER .
+```
+
+### Erro `Permission denied` ao Executar `./vendor/bin/sail`
+
+**Sintoma:** Ao tentar executar `./vendor/bin/sail up`, o terminal retorna `Permission denied`, mesmo após ajustar o dono dos arquivos.
+
+**Causa:** O sistema de arquivos do WSL pode estar montado de uma forma que impede a execução direta de scripts.
+
+**Solução:** Execute o script `sail` usando o `bash` diretamente. Todos os comandos no tutorial acima já usam este método para evitar o problema, mas caso você tente executar de outra forma, lembre-se de usar este formato:
+
+```bash
+# Formato correto
+bash ./vendor/bin/sail up -d
+
+# Em vez de:
+# ./vendor/bin/sail up -d
+```
+
+---
