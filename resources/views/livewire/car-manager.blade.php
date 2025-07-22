@@ -1,9 +1,20 @@
 <div>
-    <x-slot name="header">
-        <h2 class="font-semibold text-xl text-gray-800 leading-tight">
-            {{ __('Dashboard') }}
-        </h2>
-    </x-slot>
+    <div class="py-12">
+        <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="bg-white overflow-hidden shadow-xl sm:rounded-lg px-4 py-4">
+                
+                <!-- Seção de Notificações de Aluguel Aprovado -->
+                @if($approvedRentals->isNotEmpty())
+                    <div class="mb-8 p-4 bg-green-100 border-l-4 border-green-500 text-green-700">
+                        <h3 class="font-bold text-lg">Seus pedidos foram aceitos!</h3>
+                        @foreach($approvedRentals as $rental)
+                            <div class="mt-2">
+                                <p>Você já pode guardar seu <strong>{{ $rental->car->brand }} {{ $rental->car->model }}</strong> na garagem de <strong>{{ $rental->owner->name }}</strong>.</p>
+                                <p>Entre em contato para combinar o acesso: <strong>{{ $rental->owner->phone }}</strong></p>
+                            </div>
+                        @endforeach
+                    </div>
+                @endif
 
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
@@ -60,6 +71,10 @@
                             <td class="border px-4 py-2">
                                 <button wire:click="edit({{ $car->id }})" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">Editar</button>
                                 <button wire:click="delete({{ $car->id }})" class="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded">Deletar</button>
+                                @if(!$car->rental)
+                                    <button wire:click="findSpot({{ $car->id }})" class="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded">Encontrar Vaga</button>
+                                @endif
+
                             </td>
                         </tr>
                         @endforeach
@@ -68,4 +83,11 @@
             </div>
         </div>
     </div>
+    @if($showFindSpotModal)
+        @include('livewire.find-spot-modal')
+    @endif
+
+    @if($showRequestModal)
+        @include('livewire.request-rental-modal')
+    @endif
 </div>
